@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+         
+        </script>       
+<style>
+#customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+<script>
+    // var session = getCookie('session')
+    // if (session === ''){
+    //     window.location.hred ='/'
+    // }
+    // else{
+      var myRequest = new XMLHttpRequest();
+
+myRequest.open('POST', '/interaction/details');
+myRequest.setRequestHeader("Content-Type", "application/json");
+//myRequest.setRequestHeader("Content-Type", "text/plain");
+
+myRequest.send(JSON.stringify({username: localStorage.getItem('username')}));
+myRequest.onreadystatechange = function () { 
+    
+    if (myRequest.status === 200) {
+        var d = (JSON.parse(myRequest.responseText).data)
+        google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
+    
+          function drawChart() {
+              var t = {};
+            for(var i in d ){
+                if(d[i].text in t){
+                    t[d[i].text] +=1
+                } else {
+                    t[d[i].text] = 1
+                }
+            }
+            console.log(t)
+            var arr = [['Tag', 'Count']]
+            for(var k in t) {
+                arr.push([k, t[k]])
+            }
+            var data = google.visualization.arrayToDataTable(arr);
+    
+            var options = {
+              title: 'User Tag Trends'
+            };
+    
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    
+            chart.draw(data, options);
+          }
+        
+
+
+}
+
+
+
+
+
+
+
+
+        
+        //print(tabletext)
+
+        //console.log('Hardik')
+        //console.log(typeof(tabletext))
+        //console.log('Hardik')
+
+    else {
+      //var tabletext = myRequest.responseText
+      console.log(myRequest.responseText)
+      
+    }
+  };
+
+   
+</script>
+</head>
+<button onclick="logout()">Log Out</button><br/><br>
+
+<body>
+<a href="https://stackoverflow.com/questions/tagged/java?sort=frequent&pageSize=15" target="_blank">Link to StackOverflow</a>
+<br/>
+<br/>
+<br/>
+
+
+
+<a href="/viz" > Visualization</a>
+
+
+<br/><br/>
+
+<h3 id="uname"></h3>
+<script>document.getElementById("uname").innerHTML = "Welcome, " + localStorage.getItem('username')</script>
+<div class="container">
+
+</div>
+</body>
+<script>
+function logout() {
+    
+    var myRequest = new XMLHttpRequest();
+    myRequest.open('POST', '/user/logout');
+    myRequest.setRequestHeader("Content-Type", "application/json");
+    myRequest.send(JSON.stringify({session: localStorage.getItem('sessionID')}));
+    myRequest.onreadystatechange = function () { 
+    
+        if (myRequest.status === 200) {
+            window.location.href = "/"
+        } else {
+            window.location.href = "/"
+        } 
+    }
+}
+    
+
+</script>
+</button>
+<p>Visualization Chart</p>
+
+
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+<p>User Actions that were tracked are as folllows:-
+</p>
+<ul>
+    <li>
+        Tags Clicked by the user
+    </li>
+    <li>
+        If the user adds a comment
+    </li>
+    <li>Upvotes</li>
+    <li>Downvotes</li>
+
+    
+</ul>
+<p> Reasons for tracking the above actions</p>
+<ul>
+    <li>
+        <b>Tags Clicked</b> by user on the stack overflow is tracked down. This can allow user to understand - in which areas is he or she currently dealing with.
+    </li>
+    <li>
+        How can <b>Tags Clicked</b> Pie Chart be used further and why did I decide to log it? <br/>It can be combined with a drop down list haivng speicfic areas.<br/> Like for example in the software development area we can have - 1. Databases 2. Software tools 3. Languages etc. This way user can track down his behavior to specific subsets.        
+    </li>
+    <li>Comments associated with a particualr tag indicates thats user is more engageed in that particular subject of interest</li>
+    <li>Upvotes downvotes and comments shows user activity in a particular field of interset</li>
+    <li>All these tracked actions are comparable metrics which can reveal a lot about a user when compared tob a set of users. Helps in identyfying comman traits and thereby conducive in providing adaptive solution to the user.</li>
+</ul>
+
+<p>Analysis and Findings</p>
+<ul>
+    <li>From the above pie chart we can tell a lot about the user behaviour, like his field on interest</li>
+    <li>Trends showmn by different users reveal different pattern.</li>
+    <li>The future scope of  this assignment could be the clustering of similar users depending upon the trends seen like we have seen in the above interactive chart</li>
+</ul>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+<script>
+    // var session = getCookie('session')
+    // if (session === ''){
+    //     window.location.hred ='/'
+    // }
+    // else{
+      var myRequest = new XMLHttpRequest();
+      var flag = true;
+myRequest.open('POST', '/user/details');
+myRequest.setRequestHeader("Content-Type", "application/json");
+//myRequest.setRequestHeader("Content-Type", "text/plain");
+
+myRequest.send(JSON.stringify({username: localStorage.getItem('username')}));
+myRequest.onreadystatechange = function () { 
+    
+    if (myRequest.status === 200 && flag) {
+        
+        var tabletext=(JSON.parse(myRequest.responseText)).data;
+        
+        var t = document.getElementById("tablebody")
+        for (i = 0; i < tabletext.length; i++) {
+          var tr = "<tr>"
+            tr += "<td>" +  i  + "</td>" + "<td>" +  tabletext[i].loginTime +  "</td>" + "<td>" + tabletext[i].logoutTime+ "" + "</td>"
+         
+            tr += "</tr>"
+            t.innerHTML += tr;
+        }
+
+        flag = false;
+}
+
+
+
+
+
+
+
+
+        
+        //print(tabletext)
+
+        //console.log('Hardik')
+        //console.log(typeof(tabletext))
+        //console.log('Hardik')
+
+    else {
+      //var tabletext = myRequest.responseText
+      console.log(myRequest.responseText)
+      
+    }
+  };
+
+    // }
+    // fucntion createTb(result){
+    //     var tb_body = document.getElementById('tb_body');
+    //     for (var ind = result.length -1 ; i>=0; i--){
+    //         var tr="<tr>";
+    //             var lg_time = res
+    //     }
+    // }
+</script>
+</head>
+<button onclick="logout()">Log Out</button><br/><br>
+
+<body>
+<a href="https://stackoverflow.com/questions/tagged/java?sort=frequent&pageSize=15" target="_blank">Link to StackOverflow</a>
+<br/>
+<br/>
+<br/>
+
+
+
+<a href="/viz" > Visualization</a>
+
+
+<br/><br/>
+
+<h2>User Login History</h2>
+<h3 id="uname"></h3>
+<script>document.getElementById("uname").innerHTML = "Welcome, " + localStorage.getItem('username')</script>
+<table id="customers">
+
+    <!-- -->
+  <tr>
+    <th>No </th>
+    <th>Login Time</th>
+    <th>Logout Time</th>
+  </tr>
+  <tbody id="tablebody"></tbody>
+</table>
+
+</body>
+<script>
+function logout() {
+    
+    var myRequest = new XMLHttpRequest();
+    myRequest.open('POST', '/user/logout');
+    myRequest.setRequestHeader("Content-Type", "application/json");
+    myRequest.send(JSON.stringify({session: localStorage.getItem('sessionID')}));
+    myRequest.onreadystatechange = function () { 
+    
+        if (myRequest.status === 200) {
+            window.location.href = "/"
+        } else {
+            window.location.href = "/"
+        } 
+    }
+}
+    
+
+</script>
+</html>
