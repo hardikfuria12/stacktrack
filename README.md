@@ -1,5 +1,5 @@
 
-<div style="text-align:center; margin: 50px 0"><img src ="/docs/images/asu-logo.png" height="200"/>
+<div style="text-align:center; margin: 50px 0"><img src ="/ChromExtension/images/asu-logo.png" height="200"/>
 
 # Stack-Track : User Behaviour Tracking on Stackoverflow.
 
